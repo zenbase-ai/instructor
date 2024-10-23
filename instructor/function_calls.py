@@ -357,11 +357,20 @@ class OpenAISchema(BaseModel):
         message = completion.choices[0].message.content or ""
         message = extract_json_from_codeblock(message)
 
-        return cls.model_validate_json(
+        object = cls.model_validate_json(
             message,
             context=validation_context,
             strict=strict,
         )
+
+        object_class = object.__class__
+
+        merge_dicts = {
+            **object.dict(),
+            **completion.model_extra,
+        }
+
+        return object_class(**merge_dicts)
 
 
 def openai_schema(cls: type[BaseModel]) -> OpenAISchema:
