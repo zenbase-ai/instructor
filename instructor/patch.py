@@ -164,6 +164,7 @@ def patch(  # type: ignore
             mode=mode,
             hooks=hooks,
         )
+        response._raw_new_kwargs = new_kwargs
         return response  # type: ignore
 
     @wraps(func)  # type: ignore
@@ -196,6 +197,7 @@ def patch(  # type: ignore
             kwargs=new_kwargs,
             mode=mode,
         )
+        response._raw_new_kwargs = new_kwargs
         return response  # type: ignore
 
     new_create = new_create_async if func_is_async else new_create_sync
